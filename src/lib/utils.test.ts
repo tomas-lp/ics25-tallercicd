@@ -1,0 +1,28 @@
+import { describe, it, expect } from 'vitest';
+import { sortAsc, sortDesc, type Tarjeta } from './utils';
+
+describe('Funciones de ordenamiento de tarjetas', () => {
+  const tarjetas: Tarjeta[] = [
+    { id: 1, numero: 5 },
+    { id: 2, numero: 2 },
+    { id: 3, numero: 8 },
+    { id: 4, numero: 1 },
+  ];
+
+  it('ordena ascendentemente por numero', () => {
+    const resultado = sortAsc(tarjetas);
+    expect(resultado.map(t => t.numero)).toEqual([1, 2, 5, 8]);
+  });
+
+  it('ordena descendentemente por numero', () => {
+    const resultado = sortDesc(tarjetas);
+    expect(resultado.map(t => t.numero)).toEqual([8, 5, 2, 1]);
+  });
+
+  it('no muta el array original', () => {
+    const copia = [...tarjetas];
+    sortAsc(tarjetas);
+    sortDesc(tarjetas);
+    expect(tarjetas).toEqual(copia);
+  });
+});
