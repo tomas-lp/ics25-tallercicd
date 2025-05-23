@@ -21,12 +21,19 @@ jobs:
         uses: actions/setup-node@v3.9.1
         with:
           node-version: '22'
-          cache: 'pnpm'
 
       - name: Instalar pnpm
         run: |
           npm install --global corepack@latest
           corepack enable pnpm
+
+      - name: Cache pnpm
+        uses: actions/cache@v4.2.3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-            
 
       - name: Instalar dependencias
         run: pnpm install
