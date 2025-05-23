@@ -1,0 +1,30 @@
+name: Ejecutar pruebas
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ejecutar-pruebas:
+    name: Ejecutar pruebas
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Node
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Instalar pnpm
+        run: npm install -g pnpm
+
+      - name: Instalar dependencias
+        run: pnpm install
+
+      - name: Ejecutar tests
+        run: pnpm test
