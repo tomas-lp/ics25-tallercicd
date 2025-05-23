@@ -1,6 +1,9 @@
 name: Ejecutar pruebas
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
