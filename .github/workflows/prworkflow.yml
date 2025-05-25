@@ -54,7 +54,10 @@ jobs:
       - name: Instalar pnpm
         run: |
           npm install --global corepack@latest
-          corepack enable pnpm   
+          corepack enable pnpm
+
+      - name: Build
+        run: pnpm build
           
       - name: Build & Deploy Worker
         uses: cloudflare/wrangler-action@v3
