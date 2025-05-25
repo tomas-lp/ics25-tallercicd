@@ -4,7 +4,7 @@ account_id = "d8b1c603d91297806ae1813bf554c90b"
 compatibility_date = "2024-05-01"
 
 [assets]
-directory = "./dist/client/"
+directory = "./dist/"
 
 [env.staging]
 name = "ics25-worker-staging"
