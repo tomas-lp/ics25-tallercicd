@@ -58,7 +58,9 @@ jobs:
           corepack enable pnpm  
 
       - name: Build
-        run: pnpm build
+        run: |
+          pnpm install
+          pnpm build
         
       - name: Build & Deploy Worker
         uses: cloudflare/wrangler-action@v3
