@@ -75,6 +75,7 @@ jobs:
           pnpm build
         
       - name: Build & Deploy Worker
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           wranglerVersion: "4.16.1"
@@ -90,7 +91,12 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "🚀 *Deploy exitoso a `staging`* desde `${{ github.repository }}`\nBranch: `${{ github.ref_name }}`\nCommit: ${{ github.sha }}: ${{ github.event.head_commit.message }}"
+            text: "🚀 *Deploy exitoso a `staging`* desde `${{ github.repository }}`\n\nRama: `${{ github.ref_name }}`\n*Commit:* `${{ github.event.head_commit.id }}` ${{ github.event.head_commit.message }}"
+            attachments: [
+              {
+                "text": "👉 <${{ steps.deploy.outputs.deployment-url }}|Visitar el sitio desplegado>"
+              }
+            ]
 
       - name: Post failure to Slack
         if: failure()
@@ -100,4 +106,9 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "⚠️ *Fallo el deploy a `staging`* en `${{ github.repository }}`\n`<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Ver logs de la ejecución>`"
+            text: "⚠️ *Fallo el deploy a `staging`* en `${{ github.repository }}`"
+            attachments: [
+              {
+                "text": "👉 <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Ver logs de la ejecucion>"
+              }
+            ]
