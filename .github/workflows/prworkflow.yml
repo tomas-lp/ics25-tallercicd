@@ -67,7 +67,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: wrangler versions upload
+          command: versions upload
           postCommands: |
             CMD_OUTPUT=${{ steps.deploy.outputs.command-output }}
             PREVIEW_URL=$(echo "$CMD_OUTPUT" | grep -Eo 'https://[^ ]+')
