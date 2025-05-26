@@ -89,6 +89,7 @@ jobs:
           method: chat.postMessage
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
+            channel: ${{ secrets.SLACK_CHANNEL_ID }}
             text: "🚀 *Deploy exitoso a `staging`* desde `${{ github.repository }}`\nBranch: `${{ github.ref_name }}`"
 
       - name: Post failure to Slack
@@ -98,4 +99,5 @@ jobs:
           method: chat.postMessage
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
+            channel: ${{ secrets.SLACK_CHANNEL_ID }}
             text: "⚠️ *Fallo el deploy a `staging`* en `${{ github.repository }}`\nRevisá el log del job `${{ github.job }}`"
