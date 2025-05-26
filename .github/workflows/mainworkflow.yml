@@ -90,7 +90,7 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "🚀 *Deploy exitoso a `staging`* desde `${{ github.repository }}`\nBranch: `${{ github.ref_name }}`"
+            text: "🚀 *Deploy exitoso a `staging`* desde `${{ github.repository }}`\nBranch: `${{ github.ref_name }}`\nCommit: ${{ github.sha }}: ${{ github.event.head_commit.message }}"
 
       - name: Post failure to Slack
         if: failure()
@@ -100,4 +100,4 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "⚠️ *Fallo el deploy a `staging`* en `${{ github.repository }}`\nRevisá el log del job `${{ github.job }}`"
+            text: "⚠️ *Fallo el deploy a `staging`* en `${{ github.repository }}`\n`<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Ver logs de la ejecución>`"
