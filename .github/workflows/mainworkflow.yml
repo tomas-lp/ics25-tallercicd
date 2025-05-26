@@ -81,3 +81,21 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy --env staging #Despliega en staging
+
+      - name: Post success to Slack
+        if: success()
+        uses: slackapi/slack-github-action@v2.1.0
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            text: "🚀 *Deploy exitoso a `staging`* desde `${{ github.repository }}`\nBranch: `${{ github.ref_name }}`"
+
+      - name: Post failure to Slack
+        if: failure()
+        uses: slackapi/slack-github-action@v2.1.0
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            text: "⚠️ *Fallo el deploy a `staging`* en `${{ github.repository }}`\nRevisá el log del job `${{ github.job }}`"
