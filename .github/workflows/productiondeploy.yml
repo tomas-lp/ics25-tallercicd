@@ -1,7 +1,7 @@
-name: Desplegar a producción # Updated name
+name: Desplegar a producción
 
 on:
-  workflow_dispatch: # Changed from push to main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # Standardized version
+        uses: actions/checkout@v4.2.2
 
       - name: Setup Node
         uses: actions/setup-node@v3.9.1
@@ -32,28 +32,21 @@ jobs:
       - name: Ejecutar tests
         run: pnpm test
 
-      - name: Get Commit Info # Added step for commit details
-        id: get_commit_info
-        run: |
-          echo "sha_short=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_OUTPUT
-          # Ensure the message is properly escaped for JSON or use a simpler format if issues arise
-          commit_message=$(git log -1 --pretty=%B ${{ github.sha }} | head -n 1) # Get first line of commit message
-          echo "message=${commit_message}" >> $GITHUB_OUTPUT
-
       - name: Post failure to Slack
         if: failure()
-        uses: slackapi/slack-github-action@v2.1.0 # Kept user-specified version
+        uses: slackapi/slack-github-action@v2.1.0
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "❌ *Fallaron los tests en `${{ github.repository }}`*\n\n*Branch:* `${{ github.ref_name }}`\n*Commit:* `${{ steps.get_commit_info.outputs.sha_short }}` - `${{ steps.get_commit_info.outputs.message }}`\n*Triggered by:* `${{ github.actor }}`"
+            text: "*Push a `${{ github.ref_name }}`*\n\n ❌ *Fallaron los tests en* `${{ github.repository }}`\n\n*Commit:* `${{ github.event.head_commit.id }}` ${{ github.event.head_commit.message }}"
             attachments: [
               {
                 "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Ver logs de la ejecucion>"
               }
             ]
+  
   
   sonarqube:
     name: SonarQube
@@ -64,11 +57,6 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       
-      - name: Setup Node # Added Node setup
-        uses: actions/setup-node@v3.9.1
-        with:
-          node-version: '22'
-
       - name: Instalar pnpm
         run: |
           npm install --global corepack@latest
@@ -81,25 +69,20 @@ jobs:
         run: pnpm test --coverage
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5 # Kept user-specified version
+        uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   
+  
   deploy:
-    name: Deploy to Production # Added job name
     runs-on: ubuntu-latest
-    environment: production # Changed from staging and uncommented
+    # environment: production
     timeout-minutes: 60
-    needs: [test, sonarqube] 
+    needs: [test, sonarqube] #Para desplegar necesito que los jobs anteriores terminen con exito.
     if: success()
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # Standardized version
-
-      - name: Setup Node # Added Node setup
-        uses: actions/setup-node@v3.9.1
-        with:
-          node-version: '22'
+        uses: actions/checkout@v4
 
       - name: Instalar pnpm
         run: |
@@ -110,32 +93,25 @@ jobs:
         run: |
           pnpm install
           pnpm build
-          
-      - name: Build & Deploy Worker to Production
+        
+      - name: Build & Deploy Worker
         id: deploy
-        uses: cloudflare/wrangler-action@v3 # Kept user-specified version
+        uses: cloudflare/wrangler-action@v3
         with:
-          wranglerVersion: "4.16.1" # Kept user-specified wrangler version
+          wranglerVersion: "4.16.1"
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env production # Changed to production, updated comment
-
-      - name: Get Commit Info # Added step for commit details
-        id: get_commit_info
-        run: |
-          echo "sha_short=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_OUTPUT
-          commit_message=$(git log -1 --pretty=%B ${{ github.sha }} | head -n 1) # Get first line
-          echo "message=${commit_message}" >> $GITHUB_OUTPUT
+          command: deploy --env production #Despliega en production
 
       - name: Post success to Slack
         if: success()
-        uses: slackapi/slack-github-action@v2.1.0 # Kept user-specified version
+        uses: slackapi/slack-github-action@v2.1.0
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "🚀 *Deploy exitoso a `production`* desde `${{ github.repository }}`\n\n*Branch:* `${{ github.ref_name }}`\n*Commit:* `${{ steps.get_commit_info.outputs.sha_short }}` - `${{ steps.get_commit_info.outputs.message }}`\n*Triggered by:* `${{ github.actor }}`"
+            text: "🚀 *Deploy exitoso a `production`* desde `${{ github.repository }}`\n\n*Commit:* `${{ github.event.head_commit.id }}` ${{ github.event.head_commit.message }}"
             attachments: [
               {
                 "text": "<${{ steps.deploy.outputs.deployment-url }}|Visitar el sitio desplegado>"
@@ -144,13 +120,13 @@ jobs:
 
       - name: Post failure to Slack
         if: failure()
-        uses: slackapi/slack-github-action@v2.1.0 # Kept user-specified version
+        uses: slackapi/slack-github-action@v2.1.0
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "❌ *Fallo el deploy a `production`* en `${{ github.repository }}`\n\n*Branch:* `${{ github.ref_name }}`\n*Commit:* `${{ steps.get_commit_info.outputs.sha_short }}` - `${{ steps.get_commit_info.outputs.message }}`\n*Triggered by:* `${{ github.actor }}`"
+            text: "❌ *Fallo el deploy a `production`* en `${{ github.repository }}`\n\n*Commit:* `${{ github.event.head_commit.id }}` ${{ github.event.head_commit.message }}"
             attachments: [
               {
                 "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Ver logs de la ejecucion>"
@@ -158,32 +134,20 @@ jobs:
             ]
 
       - name: Crear Deployment en GitHub
-        uses: bobheadxi/deployments@v1 # Kept user-specified version
+        uses: bobheadxi/deployments@v1
         id: creardeploy
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env: production # Changed to production
+          env: production
           ref: ${{ github.sha }}
       
       - name: Marcar Deployment como exitoso
-        uses: bobheadxi/deployments@v1 # Kept user-specified version
-        if: success() # Ensure this runs only on overall success of previous steps
+        uses: bobheadxi/deployments@v1
         with:
           step: finish
           token: ${{ secrets.GITHUB_TOKEN }}
-          env: production # Changed to production
+          env: production
           status: success
           deployment_id: ${{ steps.creardeploy.outputs.deployment_id }}
           env_url: ${{ steps.deploy.outputs.deployment-url }}
-
-      - name: Marcar Deployment como fallido # Added step to mark deployment failure
-        uses: bobheadxi/deployments@v1
-        if: failure() # Ensure this runs only on failure
-        with:
-          step: finish
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env: production 
-          status: failure
-          deployment_id: ${{ steps.creardeploy.outputs.deployment_id }}
-          env_url: ${{ steps.deploy.outputs.deployment-url }} # URL might not be applicable on failure
