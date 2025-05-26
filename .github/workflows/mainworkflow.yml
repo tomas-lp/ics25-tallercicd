@@ -129,6 +129,15 @@ jobs:
               }
             ]
 
+      - name: Crear Deployment en GitHub
+        uses: bobheadxi/deployments@v1
+        id: creardeploy
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: staging
+          ref: ${{ github.sha }}
+      
       - name: Marcar Deployment como exitoso
         uses: bobheadxi/deployments@v1
         with:
@@ -136,5 +145,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           env: staging
           status: success
-          deployment_id: ${{ steps.deploy.outputs.deployment-id }}
+          deployment_id: ${{ steps.creardeploy.outputs.deployment_id }}
           env_url: ${{ steps.deploy.outputs.deployment-url }}
