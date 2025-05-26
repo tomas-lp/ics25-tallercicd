@@ -5,9 +5,3 @@ compatibility_date = "2024-05-01"
 
 [assets]
 directory = "./dist/"
-
-[env.staging]
-name = "ics25-worker-staging"
-
-[env.production]
-name = "ics25-worker"
