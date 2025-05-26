@@ -67,16 +67,11 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: versions deploy
-          postCommands: |
-            CMD_OUTPUT=${{ steps.deploy.outputs }}
-            echo "$CMD_OUTPUT" >> $GITHUB_OUTPUT
+          command: versions upload
       
       - name: Comentar en la PR con la URL de despliegue
-        uses: peter-evans/create-or-update-comment@v4
+        uses: KeisukeYamashita/create-comment@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
+          comment: |
             🚀 Despliegue de preview disponible en:
-            👉 [${{ steps.deploy.outputs.preview_url }}](${{ steps.deploy.outputs.preview_url }})
+            👉 [${{ steps.deploy.outputs.deployment-url }}](${{ steps.deploy.outputs.deployment-url }})
