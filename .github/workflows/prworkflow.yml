@@ -68,7 +68,7 @@ jobs:
           
       - name: Build & Deploy Worker
         id: deploy
-        uses: cloudflare/wrangler-action@v3.0.2
+        uses: buberdds/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -79,4 +79,4 @@ jobs:
         with:
           comment: |
             🚀 Despliegue de preview disponible en:
-            👉 [${{ steps.deploy.outputs.deployment-url }}](${{ steps.deploy.outputs.deployment-url }})
+            👉 [${{ steps.deploy.outputs.url }}](${{ steps.deploy.outputs.url }})
