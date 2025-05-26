@@ -27,6 +27,21 @@ jobs:
 
       - name: Ejecutar tests
         run: pnpm test
+
+      - name: Post failure to Slack
+        if: failure()
+        uses: slackapi/slack-github-action@v2.1.0
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
+          payload: |
+            channel: ${{ secrets.SLACK_CHANNEL_ID }}
+            text: "*Push a `${{ github.ref_name }}`*\n\n ❌ *Fallaron los tests en `${{ github.repository }}`"
+            attachments: [
+              {
+                "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Ver logs de la ejecucion>"
+              }
+            ]
   
   
   sonarqube:
