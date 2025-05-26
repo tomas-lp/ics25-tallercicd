@@ -62,14 +62,15 @@ jobs:
           pnpm build
           
       - name: Build & Deploy Worker
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: |
-            OUTPUT=$(wrangler versions upload)
-            echo "$OUTPUT"
-            PREVIEW_URL=$(echo "$OUTPUT" | grep -Eo 'https://[^ ]+')
+          command: wrangler versions upload
+          postCommands: |
+            CMD_OUTPUT=${{ steps.deploy.outputs.command-output }}
+            PREVIEW_URL=$(echo "$CMD_OUTPUT" | grep -Eo 'https://[^ ]+')
             echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
       
       - name: Comentar en la PR con la URL de despliegue
