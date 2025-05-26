@@ -67,7 +67,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: versions upload
+          command: versions deploy
           postCommands: |
             CMD_OUTPUT=${{ steps.deploy.outputs }}
             echo "$CMD_OUTPUT" >> $GITHUB_OUTPUT
