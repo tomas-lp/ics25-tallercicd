@@ -83,4 +83,4 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             🚀 Despliegue de preview disponible en:
-            👉 [${{ steps.deploy.outputs.command-output }}](${{ steps.deploy.outputs.command-output }})
+            👉 [${{ steps.deploy.outputs.deployment-url }}](${{ steps.deploy.outputs.deployment-url }})
