@@ -3,6 +3,11 @@ on:
   pull_request:
     branches:
       - main
+
+permissions:
+  pull-requests: write
+  contents: read
+
 jobs:
   test:
     name: Ejecutar pruebas
@@ -62,8 +67,20 @@ jobs:
           pnpm build
           
       - name: Build & Deploy Worker
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
+          wranglerVersion: "4.16.1"
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: versions upload #Despliega una version de preview.
+          command: versions upload
+      
+      - name: Comentar en la PR con la URL de despliegue
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            🚀 Despliegue de preview disponible en:
+            👉 [${{ steps.deploy.outputs.deployment-url }}](${{ steps.deploy.outputs.deployment-url }})
