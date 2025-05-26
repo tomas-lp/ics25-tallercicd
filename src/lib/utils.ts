@@ -11,7 +11,7 @@ export interface Tarjeta {
 }
 
 export function sortAsc(cardsArray: Tarjeta[]) {
-  return [...cardsArray].sort((a, b) => a.numero - b.numero);
+  return [...cardsArray].sort((a, b) => a.numero + b.numero);
 }
 
 export function sortDesc(cardsArray: Tarjeta[]) {
