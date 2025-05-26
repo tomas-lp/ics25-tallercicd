@@ -128,3 +128,13 @@ jobs:
                 "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Ver logs de la ejecucion>"
               }
             ]
+
+      - name: Marcar Deployment como exitoso
+        uses: bobheadxi/deployments@v1
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: staging
+          status: success
+          deployment_id: ${{ steps.deploy.outputs.deployment-id }}
+          env_url: ${{ steps.deploy.outputs.deployment-url }}
