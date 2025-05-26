@@ -36,7 +36,7 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "*Push a `${{ github.ref_name }}`*\n\n ❌ *Fallaron los tests en* `${{ github.repository }}`"
+            text: "*Push a `${{ github.ref_name }}`*\n\n ❌ *Fallaron los tests en* `${{ github.repository }}`\n\n*Commit:* `${{ github.event.head_commit.id }}` ${{ github.event.head_commit.message }}"
             attachments: [
               {
                 "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Ver logs de la ejecucion>"
@@ -122,7 +122,7 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "❌ *Fallo el deploy a `staging`* en `${{ github.repository }}`"
+            text: "❌ *Fallo el deploy a `staging`* en `${{ github.repository }}`\n\n*Commit:* `${{ github.event.head_commit.id }}` ${{ github.event.head_commit.message }}"
             attachments: [
               {
                 "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Ver logs de la ejecucion>"
