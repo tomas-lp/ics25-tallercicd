@@ -1,4 +1,4 @@
-name: Desplegar a producción
+name: Despliegue a producción
 
 on:
   workflow_dispatch:
