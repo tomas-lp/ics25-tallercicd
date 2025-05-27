@@ -89,5 +89,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            🚀 Despliegue de preview disponible en:
-            👉 [${{ steps.deploy.outputs.deployment-url }}](${{ steps.deploy.outputs.deployment-url }})
+            ## 🚀 Despliegue de Preview
+            Se desplegó una vista previa con Cloudflare Workers  
+            👉 [Ver el sitio](${{ steps.deploy.outputs.deployment-url }})
