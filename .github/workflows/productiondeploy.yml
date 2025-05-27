@@ -40,7 +40,7 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "*Push a `${{ github.ref_name }}`*\n\n ❌ *Fallaron los tests en* `${{ github.repository }}`\n\n*Commit:* `${{ github.event.head_commit.id }}` ${{ github.event.head_commit.message }}"
+            text: "*Deploy a `production`*\n\n ❌ *Fallaron los tests en* `${{ github.repository }}`"
             attachments: [
               {
                 "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Ver logs de la ejecucion>"
@@ -111,7 +111,7 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "🚀 *Deploy exitoso a `production`* desde `${{ github.repository }}`\n\n*Commit:* `${{ github.event.head_commit.id }}` ${{ github.event.head_commit.message }}"
+            text: "🚀 *Deploy exitoso a `production`* desde `${{ github.repository }}`"
             attachments: [
               {
                 "text": "<${{ steps.deploy.outputs.deployment-url }}|Visitar el sitio desplegado>"
@@ -126,7 +126,7 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "❌ *Fallo el deploy a `production`* en `${{ github.repository }}`\n\n*Commit:* `${{ github.event.head_commit.id }}` ${{ github.event.head_commit.message }}"
+            text: "❌ *Fallo el deploy a `production`* en `${{ github.repository }}`"
             attachments: [
               {
                 "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Ver logs de la ejecucion>"
