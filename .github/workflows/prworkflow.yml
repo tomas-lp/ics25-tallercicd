@@ -35,29 +35,29 @@ jobs:
         run: pnpm test --coverage
   
   
-  # sonarqube:
-  #   name: SonarQube
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-  #     - name: SonarQube Scan
-  #       uses: SonarSource/sonarqube-scan-action@v5.2.0
-  #       env:
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #       with:
-  #          args: >
-  #            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
-  #            -Dsonar.pullrequest.branch=${{ github.head_ref }}
-  #            -Dsonar.pullrequest.base=${{ github.base_ref }}
-  #            -Dsonar.pullrequest.github.repository=${{ github.repository }}
+  sonarqube:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5.2.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+           args: >
+             -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
+             -Dsonar.pullrequest.branch=${{ github.head_ref }}
+             -Dsonar.pullrequest.base=${{ github.base_ref }}
+             -Dsonar.pullrequest.github.repository=${{ github.repository }}
   
   
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    needs: test # [test, sonarqube] #Para desplegar necesito que los jobs anteriores terminen con exito.
+    needs: [test, sonarqube] #Para desplegar necesito que los jobs anteriores terminen con exito.
     if: success()
     steps:
       - name: Checkout
