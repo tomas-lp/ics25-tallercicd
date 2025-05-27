@@ -1,1 +1,1 @@
-# React + TypeScript + Vite 😎
+# Taller de CI - ICS 2025
