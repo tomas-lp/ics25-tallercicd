@@ -8,143 +8,145 @@ import type { Tarjeta } from './lib/utils';
 import { sortAsc, sortDesc } from './lib/utils';
 
 const tarjetas = [
-	{ id: 1, numero: 1 },
-	{ id: 2, numero: 2 },
-	{ id: 3, numero: 3 },
-	{ id: 4, numero: 4 },
-	{ id: 5, numero: 5 },
-	{ id: 6, numero: 6 },
-	{ id: 7, numero: 7 },
-	{ id: 8, numero: 8 },
-	{ id: 9, numero: 9 },
-	{ id: 10, numero: 10 },
+  { id: 1, numero: 1 },
+  { id: 2, numero: 2 },
+  { id: 3, numero: 3 },
+  { id: 4, numero: 4 },
+  { id: 5, numero: 5 },
+  { id: 6, numero: 6 },
+  { id: 7, numero: 7 },
+  { id: 8, numero: 8 },
+  { id: 9, numero: 9 },
+  { id: 10, numero: 10 },
 ];
 
 function App() {
-	const [cards, setCards] = useState<Tarjeta[]>(tarjetas);
-	const [newCard, setNewCard] = useState<string>('');
+  const [cards, setCards] = useState<Tarjeta[]>(tarjetas);
+  const [newCard, setNewCard] = useState<string>('');
 
-	const addCard = () => {
-		const cardNumber = parseInt(newCard, 10);
-		if (!isNaN(cardNumber)) {
-			setCards([...cards, { id: cards.length + 1, numero: cardNumber }]);
-			setNewCard('');
-		}
-	};
+  const addCard = () => {
+    const cardNumber = parseInt(newCard, 10);
+    if (!isNaN(cardNumber)) {
 
-	const handleSortAsc = () => {
-		const sorted = sortAsc(cards);
-		setCards(sorted);
-	};
+      let newCardId = 1;
+      if (cards.length > 0) {
+        newCardId = cards[cards.length - 1].id + 1;
+      }
+      
+      const newCard:Tarjeta = {
+        id: newCardId,
+        numero: cardNumber,
+      }
 
-	const handleSortDesc = () => {
-		const sorted = sortDesc(cards);
-		setCards(sorted);
-	};
+      setCards((cards) => [...cards, newCard]);
+      setNewCard('');
+    }
+  };
 
-	const handleShuffle = () => {
-		// Algoritmo Fisher-Yates para mezclar el array
-		const shuffled = [...cards];
-		for (let i = shuffled.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-		}
-		setCards(shuffled);
-	};
+  const handleSortAsc = () => {
+    const sorted = sortAsc(cards);
+    setCards(sorted);
+  };
 
-	const removeCard = (id: number) => {
-		setCards((cards) => Array.from(cards).filter((card) => card.id !== id));
-	};
+  const handleSortDesc = () => {
+    const sorted = sortDesc(cards);
+    setCards(sorted);
+  };
 
-	return (
-		<div className='w-full h-dvh flex p-0 m-0 overflow-hidden'>
-			<Card className='border-0 border-r py-24 px-8 rounded-none w-1/4 flex flex-col shadow-none'>
-				{/* <CardHeader>
-          <CardTitle className='text-2xl'>Agregar tarjeta</CardTitle>
-        </CardHeader> */}
-				<CardContent>
-					<div className='flex flex-col gap-2'>
-						{/* <h2 className='text-2xl font-bold mb-4 text-card-foreground'>
-              Agregar tarjeta
-            </h2> */}
-						<Input
-							type='text'
-							value={newCard}
-							onChange={(e) =>
-								/^\d*$/.test(e.target.value) && setNewCard(e.target.value)
-							}
-							maxLength={4}
-							placeholder='1'
-							className='flex w-full h-32 text-center md:text-5xl font-bold'
-						/>
-						<Button className='text-lg p-8 cursor-pointer' onClick={addCard}>
-							Agregar
-						</Button>
-					</div>
-				</CardContent>
+  const handleShuffle = () => {
+    // Algoritmo Fisher-Yates para mezclar el array
+    const shuffled = [...cards];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    setCards(shuffled);
+  };
 
-				<CardFooter>
-					<div className='flex flex-col w-full gap-2'>
-						{/* Boton de ordenar ascendente */}
-						<Button
-							variant='outline'
-							className='w-full font-normal text-base p-4 cursor-pointer'
-							onClick={handleSortAsc}
-						>
-							<ArrowDown01 />
-							Ordenar ascendente
-						</Button>
-						{/* Boton de ordenar descendente */}
-						<Button
-							variant='outline'
-							className='w-full font-normal text-base p-4 cursor-pointer'
-							onClick={handleSortDesc}
-						>
-							<ArrowDown10 />
-							Ordenar descendente
-						</Button>
-						{/* Boton de mezclar */}
-						<Button
-							variant='outline'
-							className='w-full font-normal text-base p-4 cursor-pointer'
-							onClick={handleShuffle}
-						>
-							<Shuffle />
-							Mezclar tarjetas
-						</Button>
-					</div>
-				</CardFooter>
-			</Card>
+  const removeCard = (id: number) => {
+    setCards((cards) => Array.from(cards).filter((card) => card.id !== id));
+  };
 
-			<div className='flex flex-col w-full p-24 h-full border-0 rounded-none'>
-				{/* <h2 className='text-2xl font-bold mb-4 text-card-foreground'>
-          Tarjetas
-        </h2> */}
-				<div className='grid grid-cols-4 gap-4 w-full h-full text-card-foreground'>
-					<AnimatePresence>
-						{cards.map((card) => (
-							<motion.div
-								initial={{ scale: 0 }}
-								animate={{ scale: 1 }}
-								exit={{ rotate: 180, scale: 0 }}
-								layout
-								key={card.id}
-								className='relative flex justify-center items-center border rounded-xl shadow text-2xl font-bold bg-accent select-none group max-h-96'
-							>
-								{card.numero}
-								<button
-									onClick={() => removeCard(card.id)}
-									className='absolute w-full h-full bg-primary/50 backdrop-blur-sm text-white rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex justify-center items-center cursor-pointer'
-								>
-									<Trash2 size={24} />
-								</button>
-							</motion.div>
-						))}
-					</AnimatePresence>
-				</div>
-			</div>
-		</div>
-	);
+  return (
+    <div className='w-full h-dvh flex p-0 m-0 overflow-hidden'>
+      <Card className='border-0 border-r py-24 px-8 rounded-none w-1/4 flex flex-col shadow-none'>
+        <CardContent>
+          <div className='flex flex-col gap-2'>
+            <Input
+              type='text'
+              value={newCard}
+              onChange={(e) =>
+                /^\d*$/.test(e.target.value) && setNewCard(e.target.value)
+              }
+              maxLength={4}
+              placeholder='1'
+              className='flex w-full h-32 text-center md:text-5xl font-bold'
+            />
+            <Button className='text-lg p-8 cursor-pointer' onClick={addCard}>
+              Agregar
+            </Button>
+          </div>
+        </CardContent>
+
+        <CardFooter>
+          <div className='flex flex-col w-full gap-2'>
+            {/* Boton de ordenar ascendente */}
+            <Button
+              variant='outline'
+              className='w-full font-normal text-base p-4 cursor-pointer'
+              onClick={handleSortAsc}
+            >
+              <ArrowDown01 />
+              Ordenar ascendente
+            </Button>
+            {/* Boton de ordenar descendente */}
+            <Button
+              variant='outline'
+              className='w-full font-normal text-base p-4 cursor-pointer'
+              onClick={handleSortDesc}
+            >
+              <ArrowDown10 />
+              Ordenar descendente
+            </Button>
+            {/* Boton de mezclar */}
+            <Button
+              variant='outline'
+              className='w-full font-normal text-base p-4 cursor-pointer'
+              onClick={handleShuffle}
+            >
+              <Shuffle />
+              Mezclar tarjetas
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
+
+      <div className='flex flex-col w-full p-24 h-full border-0 rounded-none'>
+        <div className='grid grid-cols-4 gap-4 w-full h-full text-card-foreground'>
+          <AnimatePresence>
+            {cards.map((card) => (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ rotate: 180, scale: 0 }}
+                layout
+                key={card.id}
+                className='relative flex justify-center items-center border rounded-xl shadow text-2xl font-bold bg-accent select-none group max-h-96'
+              >
+                {card.id}
+                <button
+                  onClick={() => removeCard(card.id)}
+                  className='absolute w-full h-full bg-primary/50 backdrop-blur-sm text-white rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex justify-center items-center cursor-pointer'
+                >
+                  <Trash2 size={24} />
+                </button>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default App;
