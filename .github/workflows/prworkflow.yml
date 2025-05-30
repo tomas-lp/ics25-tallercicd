@@ -102,7 +102,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           trello-api-key: ${{ secrets.TRELLO_API_KEY }}
           trello-auth-token: ${{ secrets.TRELLO_AUTH_TOKEN }}
-          trello-list-id-pr-opened: ${{ env.TRELLO_DOING_LIST_ID }}
+          trello-list-id-pr-open: ${{ env.TRELLO_DOING_LIST_ID }}
           trello-list-id-pr-merged: ${{ env.TRELLO_DONE_LIST_ID }}
           github-include-pr-commit-messages: true
           
