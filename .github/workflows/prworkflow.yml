@@ -1,7 +1,7 @@
 name: Pull request
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, edited, synchronize, reopened]
     branches:
       - main
 
@@ -92,3 +92,14 @@ jobs:
             ## 🚀 Despliegue de Preview
             Se desplegó una vista previa con Cloudflare Workers  
             👉 [Ver el sitio](${{ steps.deploy.outputs.deployment-url }})
+
+  trello:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: rematocorp/trello-integration-action@v9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          trello-api-key: ${{ secrets.TRELLO_API_KEY }}
+          trello-auth-token: ${{ secrets.TRELLO_AUTH_TOKEN }}
+          trello-list-id-pr-merged: $TRELLO_DONE_LIST_ID
