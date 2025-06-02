@@ -80,6 +80,9 @@ jobs:
     # environment: staging
     timeout-minutes: 60
     needs: [test, sonarqube] #Para desplegar necesito que los jobs anteriores terminen con exito.
+
+    outputs:
+      deployment-url: ${{ steps.deploy.outputs.deployment-url }}
     if: success()
     steps:
       - name: Checkout
@@ -161,7 +164,7 @@ jobs:
         uses: MateuszMichalowski/lhci-slack-reporter@v1.0.4
         with:
           # Comma-separated list of URLs to test
-          urls: ${{ steps.deploy.outputs.deployment-url }}
+          urls: ${{ needs.deploy.outputs.deployment-url }}
           # Slack channel to send the report to (without #)
           slack_channel: ${{ secrets.SLACK_CHANNEL_ID }}
           # Slack API token (required if slack_webhook_url is not provided)
