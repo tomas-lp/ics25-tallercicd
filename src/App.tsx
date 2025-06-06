@@ -68,8 +68,8 @@ function App() {
   };
 
   return (
-    <div className='w-full h-dvh flex p-0 m-0 overflow-hidden'>
-      <Card className='border-0 border-r py-24 px-8 rounded-none w-1/4 flex flex-col shadow-none'>
+    <div className='w-full h-dvh flex flex-col lg:flex-row p-0 m-0 overflow-hidden'>
+      <Card className='border-0 border-b lg:border-r lg:py-24 lg:px-8 rounded-none w-full lg:w-1/4 flex flex-col justify-center lg:justify-start shadow-none'>
         <CardContent>
           <div className='flex flex-col gap-2'>
             <Input
@@ -80,7 +80,7 @@ function App() {
               }
               maxLength={4}
               placeholder='1'
-              className='flex w-full h-32 text-center md:text-5xl font-bold'
+              className='flex w-full h-16 lg:h-32 text-center md:text-5xl font-bold'
             />
             <Button className='text-lg p-8 cursor-pointer' onClick={addCard}>
               Agregar
@@ -93,7 +93,7 @@ function App() {
             {/* Boton de ordenar ascendente */}
             <Button
               variant='outline'
-              className='w-full font-normal text-base p-4 cursor-pointer'
+              className='w-full font-normal text-base p-4 cursor-pointer overflow-hidden'
               onClick={handleSortAsc}
             >
               <ArrowDown01 />
@@ -102,7 +102,7 @@ function App() {
             {/* Boton de ordenar descendente */}
             <Button
               variant='outline'
-              className='w-full font-normal text-base p-4 cursor-pointer'
+              className='w-full font-normal text-base p-4 cursor-pointer overflow-hidden'
               onClick={handleSortDesc}
             >
               <ArrowDown10 />
@@ -111,7 +111,7 @@ function App() {
             {/* Boton de mezclar */}
             <Button
               variant='outline'
-              className='w-full font-normal text-base p-4 cursor-pointer'
+              className='w-full font-normal text-base p-4 cursor-pointer overflow-hidden'
               onClick={handleShuffle}
             >
               <Shuffle />
@@ -121,7 +121,7 @@ function App() {
         </CardFooter>
       </Card>
 
-      <div className='flex flex-col w-full p-24 h-full border-0 rounded-none'>
+      <div className='flex flex-col w-full p-4 lg:p-24 h-full border-0 rounded-none'>
         <div className='grid grid-cols-4 gap-4 w-full h-full text-card-foreground'>
           <AnimatePresence>
             {cards.map((card) => (
