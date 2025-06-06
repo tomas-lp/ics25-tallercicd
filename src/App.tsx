@@ -4,8 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ArrowDown01, ArrowDown10, Shuffle, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import type { Tarjeta } from './lib/utils';
-import { sortAsc, sortDesc } from './lib/utils';
+import type { Tarjeta } from './utils/utils';
+import { sortAsc, sortDesc } from './utils/utils';
 
 const tarjetas = [
   { id: 1, numero: 1 },

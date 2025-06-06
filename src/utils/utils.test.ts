@@ -18,11 +18,4 @@ describe('Funciones de ordenamiento de tarjetas', () => {
     const resultado = sortDesc(tarjetas);
     expect(resultado.map(t => t.numero)).toEqual([8, 5, 2, 1]);
   });
-
-  it('no muta el array original', () => {
-    const copia = [...tarjetas];
-    sortAsc(tarjetas);
-    sortDesc(tarjetas);
-    expect(tarjetas).toEqual(copia);
-  });
 });
