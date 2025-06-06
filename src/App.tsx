@@ -133,7 +133,7 @@ function App() {
                 key={card.id}
                 className='relative flex justify-center items-center border rounded-xl shadow text-2xl font-bold bg-accent select-none group max-h-96'
               >
-                {card.id}
+                {card.numero}
                 <button
                   onClick={() => removeCard(card.id)}
                   className='absolute w-full h-full bg-primary/50 backdrop-blur-sm text-white rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex justify-center items-center cursor-pointer'
