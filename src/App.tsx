@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -24,13 +24,18 @@ function App() {
   const [cards, setCards] = useState<Tarjeta[]>(tarjetas);
   const [newCard, setNewCard] = useState<string>('');
 
+  useEffect(() => {
+    console.log(cards);
+  }, [cards]);
+
   const addCard = () => {
     const cardNumber = parseInt(newCard, 10);
     if (!isNaN(cardNumber)) {
 
       let newCardId = 1;
       if (cards.length > 0) {
-        newCardId = cards[cards.length - 1].id + 1;
+        const maxId = Math.max(...cards.map(t => t.id));
+        newCardId = maxId + 1;
       }
       
       const newCard:Tarjeta = {
@@ -68,8 +73,8 @@ function App() {
   };
 
   return (
-    <div className='w-full h-dvh flex flex-col lg:flex-row p-0 m-0 overflow-hidden'>
-      <Card className='border-0 border-b lg:border-r lg:py-24 lg:px-8 rounded-none w-full lg:w-1/4 flex flex-col justify-center lg:justify-start shadow-none'>
+    <div className='w-full h-dvh flex flex-col lg:flex-row p-0 m-0 overflow-hidden bg-background'>
+      <Card className='border-0 border-b bg-background lg:border-r border-border lg:py-24 lg:px-8 rounded-none w-full lg:w-1/4 flex flex-col justify-center lg:justify-start shadow-none'>
         <CardContent>
           <div className='flex flex-col gap-2'>
             <Input
@@ -80,9 +85,9 @@ function App() {
               }
               maxLength={4}
               placeholder='1'
-              className='flex w-full h-16 lg:h-32 text-center md:text-5xl font-bold'
+              className='flex w-full bg-primary-foreground h-16 lg:h-32 text-center md:text-5xl font-bold border-border hover:border-primary transition-all placeholder:text-muted'
             />
-            <Button className='text-lg p-8 cursor-pointer' onClick={addCard}>
+            <Button className='text-lg p-8 cursor-pointer bg-gradient-to-bl from-primary to-primary/80 shadow-sm' onClick={addCard}>
               Agregar
             </Button>
           </div>
@@ -93,7 +98,7 @@ function App() {
             {/* Boton de ordenar ascendente */}
             <Button
               variant='outline'
-              className='w-full font-normal text-base p-4 cursor-pointer overflow-hidden'
+              className='w-full font-normal text-base p-4 cursor-pointer overflow-hidden border-border bg-primary-foreground hover:bg-border'
               onClick={handleSortAsc}
             >
               <ArrowDown01 />
@@ -102,7 +107,7 @@ function App() {
             {/* Boton de ordenar descendente */}
             <Button
               variant='outline'
-              className='w-full font-normal text-base p-4 cursor-pointer overflow-hidden'
+              className='w-full font-normal text-base p-4 cursor-pointer overflow-hidden border-border bg-primary-foreground hover:bg-border'
               onClick={handleSortDesc}
             >
               <ArrowDown10 />
@@ -111,7 +116,7 @@ function App() {
             {/* Boton de mezclar */}
             <Button
               variant='outline'
-              className='w-full font-normal text-base p-4 cursor-pointer overflow-hidden'
+              className='w-full font-normal text-base p-4 cursor-pointer overflow-hidden border-border bg-primary-foreground hover:bg-border'
               onClick={handleShuffle}
             >
               <Shuffle />
@@ -131,7 +136,7 @@ function App() {
                 exit={{ rotate: 180, scale: 0 }}
                 layout
                 key={card.id}
-                className='relative flex justify-center items-center border rounded-xl shadow text-2xl font-bold bg-accent select-none group max-h-96'
+                className='relative flex justify-center items-center border-border rounded-xl shadow text-3xl text-primary font-bold bg-primary-foreground select-none group max-h-96'
               >
                 {card.numero}
                 <button
