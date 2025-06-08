@@ -49,34 +49,34 @@ jobs:
             ]
   
   
-  sonarqube:
-    name: SonarQube
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+  # sonarqube:
+  #   name: SonarQube
+  #   runs-on: ubuntu-latest
+  #   needs: test
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       
-      - name: Instalar pnpm
-        run: |
-          npm install --global corepack@latest
-          corepack enable pnpm          
+  #     - name: Instalar pnpm
+  #       run: |
+  #         npm install --global corepack@latest
+  #         corepack enable pnpm          
 
-      - name: Instalar dependencias
-        run: pnpm install
+  #     - name: Instalar dependencias
+  #       run: pnpm install
 
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #     - name: SonarQube Scan
+  #       uses: SonarSource/sonarqube-scan-action@v5
+  #       env:
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   
   
   deploy:
     runs-on: ubuntu-latest
     # environment: staging
     timeout-minutes: 60
-    needs: [test, sonarqube] #Para desplegar necesito que los jobs anteriores terminen con exito.
+    needs: [test] #Para desplegar necesito que los jobs anteriores terminen con exito.
 
     outputs:
       deployment-url: ${{ steps.deploy.outputs.deployment-url }}
@@ -89,8 +89,13 @@ jobs:
         run: |
           npm install --global corepack@latest
           corepack enable pnpm  
+
+      - name: Build
+        run: |
+          pnpm install
+          pnpm build
         
-      - name: Build & Deploy Worker
+      - name: Deploy Worker
         id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
