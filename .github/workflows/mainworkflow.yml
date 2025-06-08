@@ -76,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     # environment: staging
     timeout-minutes: 60
-    needs: [test] #Para desplegar necesito que los jobs anteriores terminen con exito.
+    needs: [test, sonarqube] #Para desplegar necesito que los jobs anteriores terminen con exito.
 
     outputs:
       deployment-url: ${{ steps.deploy.outputs.deployment-url }}
