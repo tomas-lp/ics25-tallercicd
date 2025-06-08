@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -23,10 +23,6 @@ const tarjetas = [
 function App() {
   const [cards, setCards] = useState<Tarjeta[]>(tarjetas);
   const [newCard, setNewCard] = useState<string>('');
-
-  useEffect(() => {
-    console.log(cards);
-  }, [cards]);
 
   const addCard = () => {
     const cardNumber = parseInt(newCard, 10);
