@@ -30,7 +30,7 @@ jobs:
         run: pnpm install
 
       - name: Ejecutar tests
-        run: pnpm test
+        run: pnpm test --silent
 
       - name: Post failure to Slack
         if: failure()
@@ -61,11 +61,6 @@ jobs:
         run: |
           npm install --global corepack@latest
           corepack enable pnpm  
-
-      - name: Build
-        run: |
-          pnpm install
-          pnpm build
         
       - name: Build & Deploy Worker
         id: deploy

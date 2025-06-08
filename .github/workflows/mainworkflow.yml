@@ -31,7 +31,7 @@ jobs:
         run: pnpm install
 
       - name: Ejecutar tests
-        run: pnpm test
+        run: pnpm test --silent --coverage
 
       - name: Post failure to Slack
         if: failure()
@@ -66,9 +66,6 @@ jobs:
       - name: Instalar dependencias
         run: pnpm install
 
-      - name: Obtener coverage
-        run: pnpm test --coverage
-
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
@@ -92,11 +89,6 @@ jobs:
         run: |
           npm install --global corepack@latest
           corepack enable pnpm  
-
-      - name: Build
-        run: |
-          pnpm install
-          pnpm build
         
       - name: Build & Deploy Worker
         id: deploy

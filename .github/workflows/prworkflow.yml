@@ -32,7 +32,7 @@ jobs:
         run: pnpm install
 
       - name: Ejecutar tests
-        run: pnpm test --coverage
+        run: pnpm test --silent --coverage
   
   
   sonarqube:
@@ -67,11 +67,6 @@ jobs:
         run: |
           npm install --global corepack@latest
           corepack enable pnpm
-
-      - name: Build
-        run: |
-          pnpm install
-          pnpm build
           
       - name: Build & Deploy Worker
         id: deploy
