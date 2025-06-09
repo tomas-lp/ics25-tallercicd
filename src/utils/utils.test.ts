@@ -11,11 +11,15 @@ describe('Funciones de ordenamiento de tarjetas', () => {
 
   it('ordena ascendentemente por numero', () => {
     const resultado = sortAsc(tarjetas);
-    expect(resultado.map(t => t.numero)).toEqual([1, 2, 5, 8]);
+    const numerosResultado = resultado.map(t => t.numero);
+    
+    expect(numerosResultado).toEqual([1, 2, 5, 8]);
   });
 
   it('ordena descendentemente por numero', () => {
     const resultado = sortDesc(tarjetas);
-    expect(resultado.map(t => t.numero)).toEqual([8, 5, 2, 1]);
+    const numerosResultado = resultado.map(t => t.numero);
+    
+    expect(numerosResultado).toEqual([8, 5, 2, 1]);
   });
 });
