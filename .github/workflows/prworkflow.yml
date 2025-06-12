@@ -29,7 +29,7 @@ jobs:
           corepack enable pnpm           
 
       - name: Instalar dependencias
-        run: pnpm install
+        run: npm install
 
       - name: Ejecutar tests
         run: pnpm test --silent --coverage
@@ -49,7 +49,7 @@ jobs:
           corepack enable pnpm          
 
       - name: Instalar dependencias
-        run: pnpm install
+        run: npm install
       
       - name: Obtener coverage
         run: pnpm test --silent --coverage
@@ -82,7 +82,7 @@ jobs:
 
       - name: Build
         run: |
-          pnpm install
+          npm install
           pnpm build
           
       - name: Deploy Worker
